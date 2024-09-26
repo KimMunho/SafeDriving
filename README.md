@@ -1,5 +1,5 @@
 <div align="center">
-<h2>[2024] Blackbox Auto-Feedback </h2>
+<h2>[2024] Blackbox Auto-Feedback for Beginner Driver</h2>
 초보 운전자들을 위한 프로젝트로 블랙박스 분석하여 Auto-Feedback 해주는 시스템
 </div>
 
@@ -11,11 +11,12 @@
 
 ## 개요
 
-- 프로젝트 이름 : Blackbox Auto-Feedback
+- 프로젝트 이름 : Blackbox Auto-Feedback for Beginner Driver
 - 팀 이름 : SafeDriving
 - 프로젝트 지속기간 : 2024.09-2025.12
 - 개발 엔진 및 언어 : Java & ReactNative
 - 멤버 : 손정제, 주예훈, 김문호
+- 사용 API : OpenCV-java
 
 ## 프로젝트 설명
 
