@@ -30,6 +30,6 @@ class MemberServiceTest {
 
         Optional<Member> findMember = memberService.findById(member.getId());
 
-        Assertions.assertThat(findMember).isEqualTo(member);
+        Assertions.assertThat(findMember.get()).isEqualTo(member);
     }
 }

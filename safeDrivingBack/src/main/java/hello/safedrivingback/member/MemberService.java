@@ -19,4 +19,18 @@ public class MemberService {
     public Optional<Member> findById(Long id) {
         return memberRepository.findById(id);
     }
+
+    public boolean authenticate(String username, String password) {
+        Optional<Member> findMember = memberRepository.findByUsername(username);
+
+        if (findMember.isPresent()) {
+            if (findMember.get().getPassword().equals(password)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
 }
