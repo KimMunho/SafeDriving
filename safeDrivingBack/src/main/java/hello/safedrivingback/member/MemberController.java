@@ -1,10 +1,17 @@
 package hello.safedrivingback.member;
 
+import hello.safedrivingback.exception.JoinException;
+import hello.safedrivingback.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/member")
@@ -21,22 +28,35 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String loginProcess(@ModelAttribute("member") LoginMemberForm loginForm) {
+    public String loginProcess(@Validated @ModelAttribute("member") LoginMemberForm loginForm, BindingResult bindingResult, Model model) {
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
+            model.addAttribute("member", loginForm);
+
+            bindingResult.getAllErrors().forEach(error-> {log.info("Login 유효성 검증 실패 : {}", error.getDefaultMessage());});
+            return "member/join";
+        }
 
         String username = loginForm.getUsername();
         String password = loginForm.getPassword();
 
-        boolean isAuthenticated = memberService.authenticate(username, password);
-
-        if (isAuthenticated) {
-            log.info("login success");
-            return "redirect:/";
-        } else{
-            log.info("login failed");
+        try{
+            memberService.loginAuthenticate(username, password);
+            log.info("login success : {}", loginForm.getUsername());
+        }catch (LoginException e){
+            log.info("login failed: {}", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "login";
         }
+
+        return "redirect:/";
     }
 
+    @PostMapping("/logout")
+    public String logout(){
+        return "redirect:/member/login";
+    }
 
     @GetMapping("/join")
     public String join() {
@@ -44,9 +64,33 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String join(@RequestBody Member member) {    // view 구현후에는 ModelAttribute 사용
-        memberService.join(member);
-        log.info("join success");
-        return "redirect:/member/login";
+    public String joinProcess(@Validated @ModelAttribute Member member, BindingResult bindingResult, Model model) {
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getAllErrors());
+            model.addAttribute("member", member);
+
+            bindingResult.getAllErrors().forEach(error-> {log.info("Join 유효성 검증 실패 : {}", error.getDefaultMessage());});
+            return "member/join";
+        }
+
+        try {
+            // 회원가입 인증
+            memberService.joinAuthenticate(member);
+
+            // 회원가입 처리
+            memberService.join(member);
+
+            log.info("회원가입 성공: {}", member.getUsername());
+            return "redirect:/member/login";
+        } catch (JoinException e) {
+            // 예외 발생 시 오류 메시지 추가
+            model.addAttribute("error", e.getMessage());
+            log.info("회원가입 실패: {}", e.getMessage());
+
+            // 회원가입 페이지로 돌아감
+            return "member/join";
+        }
     }
+
 }

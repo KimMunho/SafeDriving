@@ -1,6 +1,7 @@
 package hello.safedrivingback.member;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -12,12 +13,15 @@ public class Member {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "username is required.")
     private String username;
 
     @Column(nullable = false)
+    @NotBlank(message = "password is required.")
     private String password;
 
     private String email;
+
 
     public Member(){
 
