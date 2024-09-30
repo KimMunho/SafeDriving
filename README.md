@@ -80,7 +80,7 @@
         
 ## 시스템 아키텍처
 
-  1. 프론트엔드 : React.js 또는 Vue.js로 사용자 인터페이스 구현 (미정)
+  1. 프론트엔드 : React.js, Vue.js 또는 Thymeleaf로 사용자 인터페이스 구현 (미정)
   2. 백엔드 : Spring, Spring Boot를 이용하여 REST API 서버 구현
   3. 데이터베이스 : MYSQL을 사용하여 사용자 데이터 및 분석 데이터를 저장
   4. 영상 분석 엔진 : OpenCV-Java와 머신러닝 모델을 사용하여 영상 분석 처리
