@@ -5,6 +5,7 @@ import hello.safedrivingback.exception.LoginException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public void join(Member member) {
         String hashedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(hashedPassword);
@@ -25,7 +27,6 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    // 이미 가입된 아이디 문구 안뜸;
     public void joinAuthenticate(Member member) {
         String username = member.getUsername();
         String email = member.getEmail();
