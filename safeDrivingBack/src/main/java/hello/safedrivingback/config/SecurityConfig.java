@@ -1,5 +1,7 @@
 package hello.safedrivingback.config;
 
+import hello.safedrivingback.jwt.JwtFilter;
+import hello.safedrivingback.jwt.JwtUtil;
 import hello.safedrivingback.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -43,18 +46,16 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 인증 필요 URL
                 )
 
-                // memberController 에서 로그인 URL 설정을 다 해줬기 때문에 필터(Spring security)에서 해줄필요 X
-//                .formLogin(form -> form
-//                        .loginPage("/login") // 커스텀 로그인 페이지
-//                        .permitAll() // 모든 사용자 접근 허용
-//                )
                 .logout(logout -> logout
                         .permitAll() // 모든 사용자 로그아웃 허용
                 );
 
+        http    // JwtFilter 추가
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+
         //LogFilter 추가
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // Jwt 토큰은 세션을 stateless 상태로 관리하기 때문
         http

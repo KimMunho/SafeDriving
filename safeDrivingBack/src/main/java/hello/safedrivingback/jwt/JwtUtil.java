@@ -1,31 +1,25 @@
 package hello.safedrivingback.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "your_secret_key";
-    private final long EXPIRATION_TIME = 3600;
-
-    // Jwt 생성
-    public String generateToken(String subject) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, subject);
-    }
+    private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long EXPIRATION_TIME = 3600 * 1000;   // 1시간
 
     // Jwt 생성 내부 메서드
-    public String createToken(Map<String, Object> claims, String subject) {
+    public String createToken(String username) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(username)
+                .claim("username", username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
@@ -48,6 +42,10 @@ public class JwtUtil {
 
     // Claims 추출 메서드
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY) // 서명 키 설정
+                .build()                   // JwtParser 생성
+                .parseClaimsJws(token)     // JWT 토큰 파싱
+                .getBody();                // Claims 추출
     }
 }
