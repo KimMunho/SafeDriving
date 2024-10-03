@@ -4,16 +4,20 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Component
 public class JwtUtil {
 
     private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION_TIME = 3600 * 1000;   // 1시간
+
+    private final JwtTokenBlackList jwtTokenBlackList;
 
     // Jwt 생성 내부 메서드
     public String createToken(String username) {
@@ -47,5 +51,9 @@ public class JwtUtil {
                 .build()                   // JwtParser 생성
                 .parseClaimsJws(token)     // JWT 토큰 파싱
                 .getBody();                // Claims 추출
+    }
+
+    public void logout(String token) {
+        jwtTokenBlackList.addBlackList(token);
     }
 }

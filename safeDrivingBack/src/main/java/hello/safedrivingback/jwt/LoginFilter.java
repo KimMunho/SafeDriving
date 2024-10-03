@@ -18,7 +18,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
 
     public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
-        setFilterProcessesUrl("/member/login");
+        setFilterProcessesUrl("/member/login"); // 해당 경로만 필터 적용
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
@@ -50,7 +50,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        log.info("login unsuccessful");
+        log.info("아이디 또는 비밀번호가 일치하지 않습니다.");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 

@@ -20,7 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<Member> findMember = memberRepository.findByUsername(username);
 
         if (findMember.isPresent()) {
-
             return new CustomUserDetails(findMember.get());
         }
 

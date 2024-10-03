@@ -19,10 +19,12 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final JwtTokenBlackList jwtTokenBlackList;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
+
 
         if (token == null || !token.startsWith("Bearer ")) {
             log.info("Jwt token 이 존재하지 않는다.");
@@ -31,6 +33,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         token = token.substring(7);
+
+        if(jwtTokenBlackList.isBlackListed(token)){
+            log.info("로그아웃 한 사용자입니다.");
+            filterChain.doFilter(request, response);
+            return;
+        }
 
 
         boolean tokenExpired = jwtUtil.isTokenExpired(token);

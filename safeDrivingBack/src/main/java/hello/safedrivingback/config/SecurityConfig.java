@@ -1,6 +1,7 @@
 package hello.safedrivingback.config;
 
 import hello.safedrivingback.jwt.JwtFilter;
+import hello.safedrivingback.jwt.JwtTokenBlackList;
 import hello.safedrivingback.jwt.JwtUtil;
 import hello.safedrivingback.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
+    private final JwtTokenBlackList jwtTokenBlackList;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -51,7 +53,7 @@ public class SecurityConfig {
                 );
 
         http    // JwtFilter 추가
-                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
+                .addFilterBefore(new JwtFilter(jwtUtil, jwtTokenBlackList), LoginFilter.class);
 
         //LogFilter 추가
         http
