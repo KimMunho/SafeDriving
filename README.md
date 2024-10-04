@@ -1,6 +1,6 @@
 <div align="center">
-<h2>[2024] Blackbox Auto-Feedback for Beginner Driver</h2>
-초보 운전자들을 위한 프로젝트로 블랙박스 분석하여 Auto-Feedback 해주는 시스템
+<h2>[2024] AI Muncheol</h2>
+운전자들을 위한 프로젝트로 사고 영상을 분석하는 시스템
 </div>
 
 
