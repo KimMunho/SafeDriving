@@ -53,15 +53,13 @@ public class FileController {
 
     @GetMapping("/download/{fileId}")
     public ResponseEntity<byte[]> download(@PathVariable("fileId") Long fileId) {
-
-        Optional<FileEntity> findFileEntity = fileRepository.findById(fileId);
-
-        if (findFileEntity.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
         try {
-            File file = fileService.downloadFile(findFileEntity.get().getFileName());
+            File file = fileService.downloadFile(fileId);
+
+            if(file == null) {
+                return ResponseEntity.notFound().build();
+            }
+
             byte[] data = Files.readAllBytes(file.toPath());
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");

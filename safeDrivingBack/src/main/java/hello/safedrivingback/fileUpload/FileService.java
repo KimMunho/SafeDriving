@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,7 +22,6 @@ public class FileService {
 
     @Value("${file.dir}")
     private String fileDir;
-
     private final FileRepository fileRepository;
 
     @PostConstruct
@@ -54,8 +54,14 @@ public class FileService {
     }
 
     //파일 다운로드
-    public File downloadFile(String fileName) {
-        return new File(getFullPath(fileName));
+    public File downloadFile(Long fileId) {
+        Optional<FileEntity> findFileEntity = fileRepository.findById(fileId);
+        if (findFileEntity.isPresent()) {
+            String fileName = findFileEntity.get().getFileName();
+            return new File(getFullPath(fileName));
+        }
+
+        return null;
     }
 
     // db에 저장할 fileName 만들기
