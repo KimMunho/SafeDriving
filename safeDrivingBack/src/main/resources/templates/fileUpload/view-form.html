@@ -1,0 +1,14 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>파일 조회</h2>
+    </div>
+    파일명: <a th:if="${file.getId()}" th:href="|/file/download/${file.id}|" th:text="${file.getFileName()}" /><br/>
+</div> <!-- /container -->
+</body>
+</html>
