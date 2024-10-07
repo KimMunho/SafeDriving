@@ -43,10 +43,15 @@ public class SecurityConfig {
                 .formLogin((auth) -> auth.disable())
                 .httpBasic((auth) -> auth.disable())
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())) // CSRF 토큰을 쿠키에 저장
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/member/login", "/member/join").permitAll() // 접근 허용 URL
-                        .anyRequest().authenticated() // 인증 필요 URL
-                )
+
+                // 나중에 다시 설정해야됨
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/", "/member/login", "/member/join").permitAll()
+//                        .anyRequest().authenticated() // 인증 필요 URL
+//                )
+
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll())  // 개발모드에서는 모든 요청 허용 (추후 다시 설정)
 
                 .logout(logout -> logout
                         .permitAll() // 모든 사용자 로그아웃 허용
