@@ -10,14 +10,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "home";
-    }
-
-
-    // test
-    @PostMapping("/test")
-    @ResponseBody
-    public String test(){
-        return "test ok";
+        return "redirect:/member/login";
     }
 }

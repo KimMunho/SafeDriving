@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
 
-
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
 
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("member", new LoginMemberForm());
-        return "login";
+        return "/member/login";
     }
 
     // LogFilter 로 인증하기 때문에 사용 X

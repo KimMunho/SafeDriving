@@ -40,7 +40,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .formLogin((auth) -> auth.disable())
+                //.formLogin((auth) -> auth.disable())
                 .httpBasic((auth) -> auth.disable())
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())) // CSRF 토큰을 쿠키에 저장
 
@@ -60,9 +60,11 @@ public class SecurityConfig {
         http    // JwtFilter 추가
                 .addFilterBefore(new JwtFilter(jwtUtil, jwtTokenBlackList), LoginFilter.class);
 
+
+        // 잠시 주석처리 ( 로그인 경로의 웹 페이지 만들기 위해 )
         //LogFilter 추가
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        //http
+        //      .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         // Jwt 토큰은 세션을 stateless 상태로 관리하기 때문
         http
