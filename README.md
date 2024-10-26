@@ -89,3 +89,6 @@
 1. 영상 분석은 고해상도 영상을 처리할 수 있도록 시스템 자원을 충분히 확보해야한다.
 2. AI 모델의 정확도는 사고 장면의 영상 품질에 영향을 받을 수 있으며, 이에 따라 예외 처리가 필요하다.
 3. 과실 비율 분석은 국내 법적 기준을 반영하여 처리해야 한다.
+
+## 서버 로직 모식도
+https://www.figma.com/design/3XbyiDNqguWyU7adHKcAUa/Safe-Driving?node-id=0-1&node-type=canvas&t=bofEcWQytdGCJlIG-0
