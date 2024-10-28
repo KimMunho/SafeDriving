@@ -20,8 +20,14 @@
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" placeholder="Enter Password" name="password">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 mt-3" th:onclick="">회원가입</button><br>
-                    <button type="button" class="btn btn-warning w-100 mt-2">카카오 로그인</button>
+                    <button type="submit" class="btn btn-primary w-100 mt-2">로그인</button><br>
+                    <button type="button" class="btn btn-warning w-100 mt-2">카카오 로그인</button><br>
+
+                    <!-- 오류 메시지 표시 -->
+                    <div th:if="${param.error}" class="alert alert-danger mt-3">Invalid username or password.</div>
+                </form>
+                <form th:action="@{/member/join}" method="get">
+                    <button type="submit" class="btn btn-light w-100 mt-3">회원가입</button>
                 </form>
             </div>
         </div>

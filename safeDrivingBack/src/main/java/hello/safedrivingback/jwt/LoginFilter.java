@@ -21,6 +21,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         setFilterProcessesUrl("/member/login"); // 해당 경로만 필터 적용
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
     }
 
     @Override

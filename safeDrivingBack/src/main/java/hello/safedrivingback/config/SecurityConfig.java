@@ -15,14 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
     private final JwtTokenBlackList jwtTokenBlackList;
 
@@ -60,7 +58,6 @@ public class SecurityConfig {
         http    // JwtFilter 추가
                 .addFilterBefore(new JwtFilter(jwtUtil, jwtTokenBlackList), LoginFilter.class);
 
-
         // 잠시 주석처리 ( 로그인 경로의 웹 페이지 만들기 위해 )
         //LogFilter 추가
         //http
@@ -70,7 +67,6 @@ public class SecurityConfig {
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
 
         return http.build(); // 보안 필터 체인 빌드
     }
