@@ -16,7 +16,26 @@ def json_to_accident_rate(json_path):
 
 def extract_frames(video_path, interval=1):
     cap = cv2.VideoCapture(video_path)  # 주어진 video_path로 비디오 캡처 객체를 생성합니다.
+    if not cap.isOpened():
+        print("비디오 파일을 열 수 없습니다. 경로와 파일 형식을 확인하세요.")
+        return []
+    # 일단 파일을 제대로 읽었는지 체크
+
+    # 첫 번째 프레임 읽기 시도 및 확인
+    ret, first_frame = cap.read()
+    if not ret:
+        print("첫 번째 프레임을 읽지 못했습니다. 비디오 파일이 손상되었거나 호환되지 않을 수 있습니다.")
+        cap.release()
+        return []
     
+    print("첫 번째 프레임을 성공적으로 읽었습니다.")
+    cv2.imshow("First Frame", first_frame)
+    cv2.waitKey(1000)  # 첫 번째 프레임 표시 후 키 입력 대기
+    cv2.destroyAllWindows()  # 모든 윈도우 닫기
+    
+    # 첫 번째 프레임 확인 후, 초기 프레임을 다시 읽기 위해 비디오를 재설정합니다.
+    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
     frames = []  # 프레임을 저장할 빈 리스트를 초기화합니다.
     frame_rate = int(cap.get(cv2.CAP_PROP_FPS))  # 비디오의 초당 프레임 수(FPS)를 가져옵니다.
     count = 0  # 프레임 카운터를 초기화합니다.
@@ -24,7 +43,10 @@ def extract_frames(video_path, interval=1):
     while cap.isOpened():  # 비디오 캡처 객체가 열려 있는 동안 루프를 계속합니다.
         ret, frame = cap.read()  # 비디오에서 프레임을 읽습니다. ret은 읽기 성공 여부를 나타냅니다.
         if not ret:  # 프레임을 읽지 못했을 경우 루프를 종료합니다.
-            print("cap read err")
+            if cap.get(cv2.CAP_PROP_POS_FRAMES) >= cap.get(cv2.CAP_PROP_FRAME_COUNT):
+                print("End of the video")
+            else:
+                print("Failed to read properly")            
             break
 
         # 매 interval초마다 1개의 프레임을 추출합니다.
