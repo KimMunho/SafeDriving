@@ -43,12 +43,10 @@ def json_to_accident_rate(json_path):
         data = json.load(f)
     
     # JSON 파일에서 과실 비율을 확인하여 추출
-    if 'accident_negligence_rate' in data['video']:
-        negligence_rate = data['video']['accident_negligence_rate']
-        target = np.array([negligence_rate])
-    elif 'accident_negligence_rateA' in data['video']:
+    if 'accident_negligence_rateA' in data['video'] and 'accident_negligence_rateB' in data['video']:
         negligence_rateA = data['video']['accident_negligence_rateA']
-        target = np.array([negligence_rateA])
+        negligence_rateB = data['video']['accident_negligence_rateB']
+        target = np.array([negligence_rateA, negligence_rateB])
     else:
         raise ValueError("JSON 파일에서 올바른 과실 비율 데이터를 찾을 수 없습니다.")
     
@@ -93,11 +91,12 @@ def main():
     print(f"추출된 프레임 수: {len(frames)}")
 
     # JSON 파일에서 실제 라벨 가져오기
-    true_labels = json_to_accident_rate(json_path)
-    print("추출된 과실 비율:", true_labels)
+    accident_rates = json_to_accident_rate(json_path)
+    print(f"추출된 과실 비율A:", {accident_rates[0]})
+    print(f"추출된 과실 비율B:", {accident_rates[1]})
 
-    # 데이터 준비 (라벨이 단일 값일 경우 데이터 셋을 맞춰줘야 함)
-    labels = np.full(len(frames), true_labels[0])  # 프레임 수만큼 라벨을 동일하게 설정
+    # 데이터 준비 (프레임별로 과실비율에 대한 데이터 2차원배열로 할당)
+    labels = np.tile(accident_rates, (len(frames), 1))
     
     # 데이터 준비
     X, y = prepare_data(frames, labels, num_classes=81)  # num_classes 조정
