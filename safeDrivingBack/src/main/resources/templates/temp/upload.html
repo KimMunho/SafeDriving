@@ -87,12 +87,11 @@
   <div class="container my-auto">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <h2>AI Muncheol - 파일 업로드</h2>
+        <h2>AI Muncheol</h2>
         <form th:action="@{/temp/upload}" method="post" enctype="multipart/form-data">
           <div class="upload-section">
             <label for="file">파일 선택</label>
             <input type="file" id="file" name="file" accept="video/*" required>
-            <p>사고 영상 파일을 업로드 해주세요.</p>
             <div class="upload-status">
               <p id="status-message">선택된 파일: 없습니다.</p>
             </div>
